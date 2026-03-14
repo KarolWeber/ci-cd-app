@@ -18,7 +18,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Docker build image
-        run: docker-build --no-cache -t ci-cd-calc-app .
+        run: docker build --no-cache -t ci-cd-calc-app .
 
       - name: Run unit tests
         run: docker run --rm ci-cd-calc-app
