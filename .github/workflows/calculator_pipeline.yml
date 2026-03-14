@@ -34,7 +34,7 @@ jobs:
           pip install -r ci-cd-tests/requirements.txt
 
       - name: Run E2E tests
-        run: pytest ci-cd-tests/test
+        run: pytest ci-cd-tests/tests
 
       - name: Cleanup Docker containers
         if: always()
