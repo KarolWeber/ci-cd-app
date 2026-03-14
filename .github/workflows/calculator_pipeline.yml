@@ -26,16 +26,12 @@ jobs:
       - name: Start app
         run: docker run -d -p 5000:5000 --name calc-app ci-cd-app
 
-      - name: Checkout E2E tests
-        uses: actions/checkout@v6
-        with:
-          repository: KarolWeber/ci-cd-tests
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: ci-cd-tests
+      - name: Clone E2E repository
+        run: git clone https://github.com/KarolWeber/ci-cd-tests.git
 
       - name: Install E2E test dependencies
         run: | 
-          python pip install -r requirements.txt
+          python pip install -r ci-cd-tests/requirements.txt
 
       - name: Run E2E tests
         run: pytest ci-cd-tests/test
