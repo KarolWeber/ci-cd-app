@@ -31,7 +31,7 @@ jobs:
 
       - name: Install E2E test dependencies
         run: | 
-          python pip install -r ci-cd-tests/requirements.txt
+          pip install -r ci-cd-tests/requirements.txt
 
       - name: Run E2E tests
         run: pytest ci-cd-tests/test
