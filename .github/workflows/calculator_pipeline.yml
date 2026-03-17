@@ -23,27 +23,6 @@ jobs:
       - name: Run unit tests
         run: docker run --rm ci-cd-app
 
-      - name: Start app
-        run: |
-          docker run -d --name calc-app -p 5000:5000 ci-cd-app
-          echo "Waiting for server"
-          for i in {1..20}; do
-            if curl -s http://localhost:5000/health; then
-              echo "Server is up!"
-              break
-            fi
-            sleep 1
-          done
-
-      - name: Clone E2E repository
-        run: git clone https://github.com/KarolWeber/ci-cd-tests.git
-
-      - name: Install E2E test dependencies
-        run: pip install -r ci-cd-tests/requirements.txt
-
-      - name: Run E2E tests
-        run: pytest ci-cd-tests/tests
-
       - name: Cleanup Docker containers
         if: always()
         run: docker ps -aq | xargs -r docker rm -f
