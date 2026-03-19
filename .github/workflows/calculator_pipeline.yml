@@ -34,6 +34,20 @@ jobs:
           docker logs test-app
           exit 1
 
+      - name: Checkout e2e repository
+        uses: actions/checkout@v4
+        with:
+          repository: KarolWeber/ci-cd-tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ci-cd-tests
+
+      - name: Run e2e
+        run: |
+          install requirements.txt
+          pytest
+        env:
+          BASE_URL: http://localhost:5000
+
       - name: Cleanup Docker containers
         if: always()
         run: docker ps -aq | xargs -r docker rm -f
