@@ -11,20 +11,29 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-
-      # 1️⃣ Checkout repo z aplikacją
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      # 2️⃣ Build obrazu Docker (opcjonalnie, np. do deployu)
-      - name: Build Docker image
+      - name: Set up docker
+        uses: docker/setup-buildx-action@v4
+
+      - name: Docker build image
         run: docker build --no-cache -t ci-cd-app .
 
-      # 3️⃣ Run unit tests w kontenerze
       - name: Run unit tests
-        run: docker run --rm ci-cd-app pytest
+        run: docker run -d -p 5000:5000 --name test-app ci-cd-app
 
-      # 4️⃣ Checkout repo z testami e2e
+      - name: Wait for port
+        run: |
+          for i in {1..15}; do
+            nc -z localhost 5000 && echo "Port is open" && exit 0
+            echo "Waiting for port..."
+            sleep 2
+          done
+          echo "App did not start"
+          docker logs test-app
+          exit 1
+
       - name: Checkout e2e repository
         uses: actions/checkout@v4
         with:
@@ -32,23 +41,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: ci-cd-tests
 
-      - name: Run e2e tests with app
+      - name: Run e2e
         run: |
-          # Start app in background
-          python app/app.py &
-          APP_PID=$!
-      
-          # Poczekaj chwilę, żeby Flask wystartował
-          for i in {1..15}; do
-            curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/add?a=1&b=1 && break
-            echo "Waiting for app..."
-            sleep 2
-          done
-      
-          # Run e2e tests
           python -m pip install --upgrade pip
           python -m pip install -r ci-cd-tests/requirements.txt
           pytest ci-cd-tests/tests
-      
-          # Stop Flask after tests
-          kill $APP_PID
+        env:
+          BASE_URL: http://127.0.0.1:5000
+
+      - name: Cleanup Docker containers
+        if: always()
+        run: docker rm -f test-app || true
+
+
