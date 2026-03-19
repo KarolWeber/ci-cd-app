@@ -47,7 +47,7 @@ jobs:
           python -m pip install -r ci-cd-tests/requirements.txt
           pytest ci-cd-tests/tests
         env:
-          BASE_URL: http://localhost:5000
+          BASE_URL: http://127.0.0.1:5000
 
       - name: Cleanup Docker containers
         if: always()
