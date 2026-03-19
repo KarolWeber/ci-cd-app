@@ -32,24 +32,23 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: ci-cd-tests
 
-      # 5️⃣ Run Flask app in background (bez kontenera)
-      - name: Start app in background
+      - name: Run e2e tests with app
         run: |
+          # Start app in background
           python app/app.py &
           APP_PID=$!
-          echo "Waiting 5s for app to start..."
-          sleep 5
-          echo "App should be ready on http://127.0.0.1:5000"
-
-      # 6️⃣ Run e2e tests
-      - name: Run e2e tests
-        run: |
+      
+          # Poczekaj chwilę, żeby Flask wystartował
+          for i in {1..15}; do
+            curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/add?a=1&b=1 && break
+            echo "Waiting for app..."
+            sleep 2
+          done
+      
+          # Run e2e tests
           python -m pip install --upgrade pip
           python -m pip install -r ci-cd-tests/requirements.txt
           pytest ci-cd-tests/tests
-        env:
-          BASE_URL: http://127.0.0.1:5000
-
-      # 7️⃣ Stop app after tests
-      - name: Stop app
-        run: kill $APP_PID || true
+      
+          # Stop Flask after tests
+          kill $APP_PID
