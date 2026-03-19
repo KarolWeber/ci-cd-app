@@ -21,7 +21,7 @@ jobs:
         run: docker build --no-cache -t ci-cd-app .
 
       - name: Run unit tests
-        run: docker run -d -p 5000:5000 --name test-app ci-cd-app python app/app.py
+        run: docker run -d -p 5000:5000 --name test-app ci-cd-app
 
       - name: Wait for port
         run: |
@@ -51,6 +51,6 @@ jobs:
 
       - name: Cleanup Docker containers
         if: always()
-        run: docker ps -aq | xargs -r docker rm -f
+        run: docker rm -f test-app || true
 
 
