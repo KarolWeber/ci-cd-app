@@ -26,7 +26,7 @@ jobs:
       - name: Wait for port
         run: |
           for i in {1..15}; do
-            nc -z http://127.0.0.1:5000 && echo "Port is open" && exit 0
+            nc -z http://127.0.0.1 5000 && echo "Port is open" && exit 0
             echo "Waiting for port..."
             sleep 2
           done
