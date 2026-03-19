@@ -23,6 +23,14 @@ jobs:
       - name: Run unit tests
         run: docker run --rm ci-cd-app
 
+      - name: Wait for app
+        run: |
+          for i in {1..10}; do
+            curl -f http://localhost:8080/health && break
+            echo "Waiting for app..."
+            sleep 3
+          done
+
       - name: Cleanup Docker containers
         if: always()
         run: docker ps -aq | xargs -r docker rm -f
