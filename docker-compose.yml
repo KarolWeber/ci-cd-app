@@ -1,0 +1,16 @@
+services:
+  app:
+    build: ./app
+    ports:
+      - "5000:5000"
+
+  e2e:
+    image: python:3.10
+    working_dir: /tests
+    volumes:
+      - ./ci-cd-tests:/tests
+    environment:
+      BASE_URL: http://app:5000
+    depends_on:
+      - app
+    command: bash -c "pip install -r requirements.txt && pytest tests"
