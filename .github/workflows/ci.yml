@@ -21,7 +21,7 @@ jobs:
         run: docker build --no-cache -t ci-cd-app .
 
       - name: Run unit tests
-        run: docker run --rm ci-cd-app pytest /tests
+        run: docker run --rm ci-cd-app pytest
 
       - name: Create Docker network
         run: docker network create e2e-tests-network || true
@@ -48,7 +48,8 @@ jobs:
           docker run --rm \
           --network e2e-tests-network \
           -e BASE_URL=http://application:5000 \
-          e2e-tests 
+          e2e-tests \
+          bash -c "find . -name '__pycache__' -type d -exec rm -rf {} + && find . -name '*.pyc' -delete && pytest"
 
       - name: Cleanup Docker containers
         if: always()
