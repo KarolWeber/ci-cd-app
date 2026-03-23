@@ -36,7 +36,7 @@ jobs:
       - name: Checkout tests repository
         uses: actions/checkout@v6
         with:
-          repository: https://github.com/KarolWeber/ci-cd-tests.git
+          repository: KarolWeber/ci-cd-app
           path: tests
           token: ${{ secrets.GITHUB_TOKEN }}
 
