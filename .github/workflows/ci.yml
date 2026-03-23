@@ -30,7 +30,7 @@ jobs:
         run: |
           docker run -d --name application \
           -p 5000:5000 \
-          --network e2e-tests-network \ 
+          --network e2e-tests-network \
           ci-cd-app
 
       - name: Checkout tests repository
