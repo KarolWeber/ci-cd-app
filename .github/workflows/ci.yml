@@ -48,7 +48,7 @@ jobs:
           docker run --rm \
           --network e2e-tests-network \
           -e BASE_URL=http://application:5000 \
-          e2e-tests
+          e2e-tests pytest
 
       - name: Cleanup Docker containers
         if: always()
