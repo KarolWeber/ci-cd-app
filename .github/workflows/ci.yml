@@ -31,7 +31,7 @@ jobs:
           docker run -d --name application \
           -p 5000:5000 \
           --network e2e-tests-network \
-          ci-cd-app
+          ci-cd-app tests/
 
       - name: Checkout tests repository
         uses: actions/checkout@v6
@@ -48,7 +48,7 @@ jobs:
           docker run --rm \
           --network e2e-tests-network \
           -e BASE_URL=http://application:5000 \
-          e2e-tests pytest
+          e2e-tests 
 
       - name: Cleanup Docker containers
         if: always()
