@@ -52,6 +52,6 @@ jobs:
 
       - name: Cleanup Docker containers
         if: always()
-        run: docker rm -f test-app || true
+        run: docker rm -f application e2e-tests || true
 
 
