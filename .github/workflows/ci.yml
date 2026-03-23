@@ -36,7 +36,7 @@ jobs:
       - name: Checkout tests repository
         uses: actions/checkout@v6
         with:
-          repository: KarolWeber/ci-cd-app
+          repository: KarolWeber/ci-cd-tests
           path: tests
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -48,8 +48,7 @@ jobs:
           docker run --rm \
           --network e2e-tests-network \
           -e BASE_URL=http://application:5000 \
-          e2e-tests \
-          bash -c "find . -name '__pycache__' -type d -exec rm -rf {} + && find . -name '*.pyc' -delete && pytest"
+          e2e-tests
 
       - name: Cleanup Docker containers
         if: always()
