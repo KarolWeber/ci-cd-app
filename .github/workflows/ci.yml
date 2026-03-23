@@ -11,7 +11,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout application repository
         uses: actions/checkout@v6
 
       - name: Set up docker
@@ -21,33 +21,34 @@ jobs:
         run: docker build --no-cache -t ci-cd-app .
 
       - name: Run unit tests
-        run: docker run -d -p 5000:5000 --name test-app ci-cd-app
+        run: docker run -rm ci-cd-app pytest
 
-      - name: Wait for port
+      - name: Create Docker network
+        run: docker network create e2e-tests-network || true
+
+      - name: Start application server
         run: |
-          for i in {1..15}; do
-            nc -z localhost 5000 && echo "Port is open" && exit 0
-            echo "Waiting for port..."
-            sleep 2
-          done
-          echo "App did not start"
-          docker logs test-app
-          exit 1
+          docker run -d --name application \
+          -p 5000:5000 \
+          --network e2e-tests-network \ 
+          ci-cd-app
 
-      - name: Checkout e2e repository
-        uses: actions/checkout@v4
+      - name: Checkout tests repository
+        uses: actions/checkout@v6
         with:
-          repository: KarolWeber/ci-cd-tests
+          repository: https://github.com/KarolWeber/ci-cd-tests.git
+          path: tests
           token: ${{ secrets.GITHUB_TOKEN }}
-          path: ci-cd-tests
+
+      - name: Build tests image
+        run: docker build -t e2e-tests .
 
       - name: Run e2e
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r ci-cd-tests/requirements.txt
-          pytest ci-cd-tests/tests
-        env:
-          BASE_URL: http://127.0.0.1:5000
+          docker run --rm \
+          --network e2e-tests-network \
+          -e BASE_URL=http://application:5000 \
+          e2e-tests
 
       - name: Cleanup Docker containers
         if: always()
