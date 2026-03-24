@@ -57,6 +57,7 @@ jobs:
         run: |
           docker run --rm \
           --network e2e-tests-network \
+          -v ${{ github.workspace }}/allure-results:/app/allure-results \
           -e BASE_URL=http://application:5000 \
           e2e-tests
 
