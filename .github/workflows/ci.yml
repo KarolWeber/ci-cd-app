@@ -37,7 +37,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: KarolWeber/ci-cd-tests
-          path: tests
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build tests image
