@@ -68,11 +68,6 @@ jobs:
           website: gh-pages-dir
           reports-site-path: ""
 
-      - name: Fix allure report link
-        run: |
-          sudo chown -R $USER:$USER gh-pages-dir
-          sed -i 's/#behaviors$/#/' gh-pages-dir/index.html
-
       - name: Publish Allure report
         uses: peaceiris/actions-gh-pages@v4
         with:
