@@ -70,6 +70,13 @@ jobs:
           website: gh-pages-dir
           reports-site-path: tests
 
+      - name: Publish Allure report
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: gh-pages-dir
+          publish_branch: gh-pages
+
       - name: Cleanup Docker containers
         if: always()
         run: docker rm -f application || true
