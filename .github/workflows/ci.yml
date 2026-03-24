@@ -14,9 +14,6 @@ jobs:
       - name: Checkout application repository
         uses: actions/checkout@v6
 
-      - name: Set up docker
-        uses: docker/setup-buildx-action@v4
-
       - name: Docker build image
         run: docker build --no-cache -t ci-cd-app .
 
@@ -33,6 +30,20 @@ jobs:
           --network e2e-tests-network \
           ci-cd-app
 
+      - name: Wait for application
+        run: |
+          echo "Waiting for application..."
+          
+          for i in {1..20}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "Application is up!"
+              break
+            fi
+            
+            echo "Waiting..."
+            sleep 2
+          done
+
       - name: Checkout tests repository
         uses: actions/checkout@v6
         with:
@@ -47,7 +58,7 @@ jobs:
           docker run --rm \
           --network e2e-tests-network \
           -e BASE_URL=http://application:5000 \
-          e2e-tests pytest tests
+          e2e-tests
 
       - name: Cleanup Docker containers
         if: always()
