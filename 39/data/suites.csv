@@ -1,7 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","3","Negative","Calculator tests","Tue Mar 24 10:00:47 GMT 2026","passed","Tue Mar 24 10:00:47 GMT 2026","","Sub tests","",""
-"","2","Mixed","Calculator tests","Tue Mar 24 10:00:47 GMT 2026","passed","Tue Mar 24 10:00:47 GMT 2026","","Sub tests","",""
-"","5","Positive","Calculator tests","Tue Mar 24 10:00:46 GMT 2026","passed","Tue Mar 24 10:00:46 GMT 2026","","Add tests","",""
-"","2","Negative","Calculator tests","Tue Mar 24 10:00:46 GMT 2026","passed","Tue Mar 24 10:00:46 GMT 2026","","Add tests","",""
-"","3","Positive","Calculator tests","Tue Mar 24 10:00:47 GMT 2026","passed","Tue Mar 24 10:00:47 GMT 2026","","Sub tests","",""
-"","11","Mixed","Calculator tests","Tue Mar 24 10:00:46 GMT 2026","passed","Tue Mar 24 10:00:47 GMT 2026","","Add tests","",""
