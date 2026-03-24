@@ -68,9 +68,9 @@ jobs:
         with:
           allure-results: allure-results
           website: gh-pages-dir
-          reports-site-path: tests
+          reports-site-path: gh-pages-dir/tests
 
-      - name: Publish Allure report
+      - name: Publish Allure report to GH Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
